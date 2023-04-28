@@ -10,9 +10,9 @@ pipeline {
 }
   stage('Run Gitleaks') {
   steps {
-    dir('https://github.com/LearnWithAshish/DVWA.git') {
+    dir('https://github.com/LearnWithAshish/vulnado.git') {
       sh '''#!/bin/bash
-          sudo gitleaks detect -f json -r https://github.com/LearnWithAshish/DVWA.git -v --report=/home/ubuntu/gitleaks/gitleaks.json
+          sudo gitleaks detect -f json -r https://github.com/LearnWithAshish/vulnado.git -v --report=/home/ubuntu/gitleaks/gitleaks.json
           exit 0
          '''
         }
@@ -21,7 +21,7 @@ pipeline {
     stage('Checkout') {
         // Check out your Git repository
         steps {
-        git 'https://github.com/LearnWithAshish/DVWA.git'
+        git 'https://github.com/LearnWithAshish/vulnado.git'
     }
     }
     stage('Dependency Check') {
