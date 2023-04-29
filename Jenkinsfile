@@ -45,6 +45,7 @@ pipeline {
     }
   }
     }
+    }
         // add here
          node {
     withCredentials([string(credentialsId: 'ARMORCODE_TOKEN', variable: 'c42d7e10-23a5-45f1-b36b-76708a89b900')]){
@@ -71,10 +72,7 @@ pipeline {
         done
         '''
     }
-}
-
-        
-        
+}    
         // no code below
-    }
+    
 }
