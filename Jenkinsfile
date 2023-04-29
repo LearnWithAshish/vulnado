@@ -1,3 +1,29 @@
+node {
+    withCredentials([string(credentialsId: 'ARMORCODE_TOKEN', variable: 'c42d7e10-23a5-45f1-b36b-76708a89b900')]){
+        sh '''
+        i=0
+        end=30
+        while [ $i -lt $end ]
+        do
+            i=$(( $i + 1 ))
+            curl --location --request POST 'https://qa.armorcode.ai/client/buildvalidation' --header 'Content-Type: application/json' --header "Authorization: Bearer c42d7e10-23a5-45f1-b36b-76708a89b900"  -d '{ "env": "Production", "product": "34651", "subProduct": "47709", "buildNumber": "'"$BUILD_NUMBER"'", "jobName":"'"$JOB_NAME"'","current":"'$i'" , "end":"'$end'"}' > result.json
+            status=$(jq -r '.status' result.json)
+            if [ $status = "HOLD" ]
+            then
+                echo "Armorcode SLA failed."
+                sleep 10
+                echo "Sleeping 10 seconds before trying again. You can temporarily release the build from Armorcode console"
+            elif [ $status = "FAILED" ]
+            then
+                echo "Exiting with error code 1"
+                exit 1
+            else
+                break
+            fi
+        done
+        '''
+    }
+}
 pipeline {
     agent any
     stages {
